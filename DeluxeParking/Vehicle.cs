@@ -10,4 +10,11 @@ public class Vehicle
         LicensePlateNumber = licensePlateNumber;
         VehicleColor = vehicleColor;
     }
+
+    public virtual string PrintVehicle()
+    {
+        string vehicleInfo = "";
+        
+        return vehicleInfo;
+    }
 }

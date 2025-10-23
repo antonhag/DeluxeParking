@@ -31,5 +31,54 @@ public class Helpers
         
         return licensplate;
     }
+
+    public static List<Vehicle> RandomVehicle(List<Vehicle> vehicles)
+    {
+        int vehicleRandomizer = Random.Shared.Next(0, 3);
+
+        switch (vehicleRandomizer)
+        {
+            case 0:
+                bool carIsElectric = true;
+                
+                Console.Write("Skriv in färgen på bilen: ");
+                string carColor = Console.ReadLine();
+                Console.Clear();
+                Console.WriteLine("Är bilen en elbil?\n 1. Elbil \n 2. Ej elbil");
+                ConsoleKeyInfo keyInput = Console.ReadKey(true);
+                switch (keyInput.Key)
+                {
+                    case ConsoleKey.D1:
+                        carIsElectric = true;
+                        break;
+                    case ConsoleKey.D2:
+                        carIsElectric = false;
+                        break;
+                    default:
+                        Console.WriteLine("Ogiltigt val!");
+                        break;
+                        
+                }
+                vehicles.Add(new Car(GenerateLicensPlateNumber(), carColor, carIsElectric));
+                break;
+            case 1:
+                Console.Write("Skriv in färgen på motorcykeln: ");
+                string motorcycleColor = Console.ReadLine();
+                Console.Clear();
+                Console.Write("Skriv in märket på motorcykeln: ");
+                string motorcycleBrand = Console.ReadLine();
+                vehicles.Add(new MotorCycle(GenerateLicensPlateNumber(), motorcycleBrand, motorcycleColor));
+                break;
+            case 2:
+                Console.Write("Skriv in färgen på bussen: ");
+                string busColor = Console.ReadLine();
+                Console.Clear();
+                Console.Write("Skriv in antalet platser bussen har: ");
+                int numberOfPassengers = int.Parse(Console.ReadLine());
+                vehicles.Add(new Bus(GenerateLicensPlateNumber(), busColor, numberOfPassengers));
+                break;
+        }
+        return vehicles;
+    }
     
 }

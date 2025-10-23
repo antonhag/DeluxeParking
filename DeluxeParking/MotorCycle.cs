@@ -8,4 +8,10 @@ public class MotorCycle : Vehicle
     {
         Brand = brand;
     }
+    
+    public override string PrintVehicle()
+    {
+        string vehicleInfo = $"MC\t{LicensePlateNumber}\t{VehicleColor}\t{Brand}";
+        return vehicleInfo;
+    }
 }

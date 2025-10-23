@@ -7,7 +7,7 @@ public class ParkingGarage
 
     public ParkingGarage()
     {
-      
+        vehicles = Helpers.RandomVehicle(vehicles);
     }
     
 }

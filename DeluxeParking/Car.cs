@@ -8,5 +8,11 @@ public class Car : Vehicle
     {
         ElectricCar = electricCar;
     }
+
+    public override string PrintVehicle()
+    {
+        string vehicleInfo = $"Bil\t{LicensePlateNumber}\t{VehicleColor}\t{(ElectricCar ? "Elbil" : "Ej elbil")}";
+        return vehicleInfo;
+    }
 }
 

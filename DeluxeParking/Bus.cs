@@ -8,4 +8,10 @@ public class Bus : Vehicle
     {
         NumberOfPassengers = numberOfPassengers;
     }
+    
+    public override string PrintVehicle()
+    {
+        string vehicleInfo = $"Bil\t{LicensePlateNumber}\t{VehicleColor}\t{NumberOfPassengers}";
+        return vehicleInfo;
+    }
 }
