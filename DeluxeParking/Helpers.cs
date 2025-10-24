@@ -1,6 +1,6 @@
 namespace DeluxeParking;
 
-public class Helpers
+public static class Helpers
 {
     public static string GenerateLicensPlateNumber()
     {
@@ -32,7 +32,7 @@ public class Helpers
         return licensplate;
     }
 
-    public static List<Vehicle> RandomVehicle(List<Vehicle> vehicles)
+    public static Vehicle RandomVehicle()
     {
         int vehicleRandomizer = Random.Shared.Next(0, 3);
 
@@ -44,7 +44,7 @@ public class Helpers
                 Console.Write("Skriv in färgen på bilen: ");
                 string carColor = Console.ReadLine();
                 Console.Clear();
-                Console.WriteLine("Är bilen en elbil?\n 1. Elbil \n 2. Ej elbil");
+                Console.WriteLine("Är bilen en elbil?\n1. Elbil\n2. Ej elbil");
                 ConsoleKeyInfo keyInput = Console.ReadKey(true);
                 switch (keyInput.Key)
                 {
@@ -57,28 +57,26 @@ public class Helpers
                     default:
                         Console.WriteLine("Ogiltigt val!");
                         break;
-                        
                 }
-                vehicles.Add(new Car(GenerateLicensPlateNumber(), carColor, carIsElectric));
-                break;
+                return new Car(GenerateLicensPlateNumber(), carColor, carIsElectric);
             case 1:
                 Console.Write("Skriv in färgen på motorcykeln: ");
-                string motorcycleColor = Console.ReadLine();
+                string mcColor = Console.ReadLine();
                 Console.Clear();
                 Console.Write("Skriv in märket på motorcykeln: ");
-                string motorcycleBrand = Console.ReadLine();
-                vehicles.Add(new MotorCycle(GenerateLicensPlateNumber(), motorcycleBrand, motorcycleColor));
-                break;
+                string mcBrand = Console.ReadLine();
+                return new MotorCycle(GenerateLicensPlateNumber(), mcColor, mcBrand);
             case 2:
                 Console.Write("Skriv in färgen på bussen: ");
                 string busColor = Console.ReadLine();
                 Console.Clear();
                 Console.Write("Skriv in antalet platser bussen har: ");
-                int numberOfPassengers = int.Parse(Console.ReadLine());
-                vehicles.Add(new Bus(GenerateLicensPlateNumber(), busColor, numberOfPassengers));
-                break;
+                int numberOfSeats = int.Parse(Console.ReadLine());
+                return new Bus(GenerateLicensPlateNumber(), busColor, numberOfSeats);
+            default:
+                return null;
         }
-        return vehicles;
+
     }
     
 }
