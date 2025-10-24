@@ -4,7 +4,7 @@ public class Car : Vehicle
 {
     public bool ElectricCar { get; set; }
 
-    public Car(string licensePlateNumber, string vehiclecolor, bool electricCar) : base(licensePlateNumber, vehiclecolor)
+    public Car(string licensePlateNumber, string vehiclecolor, double vehicleSize, bool electricCar) : base(licensePlateNumber, vehiclecolor, vehicleSize)
     {
         ElectricCar = electricCar;
     }

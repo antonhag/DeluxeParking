@@ -58,21 +58,21 @@ public static class Helpers
                         Console.WriteLine("Ogiltigt val!");
                         break;
                 }
-                return new Car(GenerateLicensPlateNumber(), carColor, carIsElectric);
+                return new Car(GenerateLicensPlateNumber(), carColor, 1, carIsElectric);
             case 1:
                 Console.Write("Skriv in färgen på motorcykeln: ");
                 string mcColor = Console.ReadLine();
                 Console.Clear();
                 Console.Write("Skriv in märket på motorcykeln: ");
                 string mcBrand = Console.ReadLine();
-                return new MotorCycle(GenerateLicensPlateNumber(), mcColor, mcBrand);
+                return new MotorCycle(GenerateLicensPlateNumber(), mcColor, 0.5, mcBrand);
             case 2:
                 Console.Write("Skriv in färgen på bussen: ");
                 string busColor = Console.ReadLine();
                 Console.Clear();
                 Console.Write("Skriv in antalet platser bussen har: ");
                 int numberOfSeats = int.Parse(Console.ReadLine());
-                return new Bus(GenerateLicensPlateNumber(), busColor, numberOfSeats);
+                return new Bus(GenerateLicensPlateNumber(), busColor, 2, numberOfSeats);
             default:
                 return null;
         }

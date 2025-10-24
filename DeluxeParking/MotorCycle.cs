@@ -4,7 +4,7 @@ public class MotorCycle : Vehicle
 {
     public string Brand { get; set; }
 
-    public MotorCycle(string licensePlateNumber, string vehicleColor, string brand) : base(licensePlateNumber, vehicleColor)
+    public MotorCycle(string licensePlateNumber, string vehicleColor, double vehicleSize, string brand) : base(licensePlateNumber, vehicleColor,  vehicleSize)
     {
         Brand = brand;
     }
