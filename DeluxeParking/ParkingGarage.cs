@@ -57,7 +57,7 @@ public class ParkingGarage
         {
             if (vehicle is Bus)
             {
-                if (i + 1 < Garage.Length && Garage[i].AvailableCapacity >= 1 && Garage[1 + 1].AvailableCapacity >= 1)
+                if (i + 1 < Garage.Length && Garage[i].AvailableCapacity >= 1 && Garage[i + 1].AvailableCapacity >= 1)
                 {
                     Garage[i].VehiclesParked.Add(vehicle);
                     Garage[i + 1].VehiclesParked.Add(vehicle);
@@ -79,7 +79,6 @@ public class ParkingGarage
                 }
             }
         }
-
         Console.WriteLine("Garaget är fullt!");
     }
 
@@ -100,7 +99,8 @@ public class ParkingGarage
             {
                 foreach (Vehicle vehicle in spot.VehiclesParked)
                 {
-                    if (vehicle is Bus && (i == 0 || !Garage[i - 1].VehiclesParked.Contains(vehicle))) //Visa buss en gång per buss per plats, annars skriver den ut samma buss två gånger
+                    // SE ÖVER
+                    if (vehicle is Bus && (i == 0 || !Garage[i - 1].VehiclesParked.Contains(vehicle))) // Visa buss en gång per buss per plats, annars skriver den ut samma buss två gånger
                     {
                         Console.WriteLine($"Plats {index}-{index + 1}: {vehicle.PrintVehicle()}");
                     }
