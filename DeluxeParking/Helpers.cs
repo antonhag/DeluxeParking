@@ -58,22 +58,22 @@ public static class Helpers
                         Console.WriteLine("Ogiltigt val!");
                         break;
                 }
-                return new Car(GenerateLicensPlateNumber(), carColor, 1, carIsElectric);
+                return new Car(GenerateLicensPlateNumber(), carColor, "Bil", 1, carIsElectric);
             case 1:
                 Console.Write("Skriv in färgen på motorcykeln: ");
                 string mcColor = Console.ReadLine();
                 Console.Clear();
                 Console.Write("Skriv in märket på motorcykeln: ");
                 string mcBrand = Console.ReadLine();
-                return new MotorCycle(GenerateLicensPlateNumber(), mcColor, 0.5, mcBrand);
+                return new MotorCycle(GenerateLicensPlateNumber(), mcColor, "Motorcykel",0.5, mcBrand);
             case 2:
                 Console.Write("Skriv in färgen på bussen: ");
                 string busColor = Console.ReadLine();
                 Console.Clear();
                 Console.Write("Skriv in antalet platser bussen har: ");
                 int numberOfSeats = int.Parse(Console.ReadLine());
-                return new Bus(GenerateLicensPlateNumber(), busColor, 2, numberOfSeats);
-            default:
+                return new Bus(GenerateLicensPlateNumber(), busColor, "Buss", 2, numberOfSeats);
+            default: // Kan egentligen aldrig nås, eftersom Random.Shared.Next endast kan bli 0,1 eller 2. Koden fungerar inte utan denna kodrad, därav finns den.
                 return null;
         }
 

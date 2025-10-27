@@ -74,7 +74,7 @@ public class ParkingGarage
                 {
                     Garage[i].VehiclesParked.Add(vehicle);
                     Garage[i].AvailableCapacity -= vehicle.VehicleSize;
-                    Console.WriteLine($"{vehicle.GetType().Name} parkerades på plats {i + 1}");
+                    Console.WriteLine($"{vehicle.VehicleName} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}");
                     return;
                 }
             }

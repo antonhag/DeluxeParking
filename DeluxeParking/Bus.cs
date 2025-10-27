@@ -4,9 +4,10 @@ public class Bus : Vehicle
 {
     public int NumberOfPassengers { get; set; }
 
-    public Bus(string licensePlateNumber, string vehicleColor, double vehicleSize, int numberOfPassengers) : base(licensePlateNumber, vehicleColor, vehicleSize)
+    public Bus(string licensePlateNumber, string vehicleColor, string vehicleName, double vehicleSize, int numberOfPassengers) : base(licensePlateNumber, vehicleColor, vehicleName, vehicleSize)
     {
         NumberOfPassengers = numberOfPassengers;
+        VehicleName = vehicleName;
     }
     
     public override string PrintVehicle()
