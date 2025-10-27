@@ -2,7 +2,7 @@ namespace DeluxeParking;
 
 public class Bus : Vehicle
 {
-    public int NumberOfPassengers { get; set; }
+    private int NumberOfPassengers { get; set; }
 
     public Bus(string licensePlateNumber, string vehicleColor, string vehicleName, double vehicleSize, int numberOfPassengers) : base(licensePlateNumber, vehicleColor, vehicleName, vehicleSize)
     {

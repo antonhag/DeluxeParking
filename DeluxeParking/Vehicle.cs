@@ -3,7 +3,7 @@ namespace DeluxeParking;
 public abstract class Vehicle // Hade redan skapat basklassen Vehicle innan interface genomgången, därav får den bli abstract istället
 {
     public string LicensePlateNumber { get; set; }
-    public string VehicleColor { get; set; }
+    protected string VehicleColor { get; set; }
     public string VehicleName { get; set; }
     public double VehicleSize { get; set; }
 

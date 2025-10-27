@@ -2,7 +2,7 @@ namespace DeluxeParking;
 
 public static class Helpers
 {
-    public static string GenerateLicensPlateNumber()
+    private static string GenerateLicensPlateNumber()
     {
         string[] licenseLetters =
         {

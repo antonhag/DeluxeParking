@@ -4,7 +4,7 @@ namespace DeluxeParking;
 
 public class ParkingGarage
 {
-    public ParkingSpot[] Garage { get; set; }
+    private ParkingSpot[] Garage { get; set; }
 
     public ParkingGarage(int totalSpots)
     {
@@ -50,7 +50,7 @@ public class ParkingGarage
         }
     }
 
-    public void AddVehicleToGarage()
+    private void AddVehicleToGarage()
     {
         Vehicle vehicle = Helpers.RandomVehicle();
 
@@ -83,12 +83,12 @@ public class ParkingGarage
                 }
             }
         }
-        
+        Console.Clear();
         Console.WriteLine("Garaget är fullt!");
         Thread.Sleep(2000);
     }
 
-    public void RemoveVehicleFromGarage()
+    private void RemoveVehicleFromGarage()
     {
         Console.Write("Skriv in registreringsnumret för fordonet du vill checka ut: ");
         string input = Console.ReadLine();
@@ -148,7 +148,7 @@ public class ParkingGarage
         }
     }
 
-    public void PrintGarage()
+    private void PrintGarage()
         {
             Console.WriteLine("Alla fordon i parkeringshuset just nu:\n");
 
