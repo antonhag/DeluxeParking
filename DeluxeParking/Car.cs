@@ -4,15 +4,14 @@ public class Car : Vehicle
 {
     private bool ElectricCar { get; set; }
 
-    public Car(string licensePlateNumber, string vehicleColor, string vehicleName, double vehicleSize, bool electricCar) : base(licensePlateNumber, vehicleColor, vehicleName, vehicleSize)
+    public Car(string licensePlateNumber, string color, string name, double size, bool electricCar) : base(licensePlateNumber, color, name, size)
     {
         ElectricCar = electricCar;
-        VehicleName = vehicleName;
     }
 
     public override string PrintVehicle()
     {
-        string vehicleInfo = $"Bil\t{LicensePlateNumber}\t{VehicleColor}\t{(ElectricCar ? "Elbil" : "Ej elbil")}";
+        string vehicleInfo = $"\tBil\t{LicensePlateNumber}\t{Color}\t{(ElectricCar ? "Elbil" : "Ej elbil")}";
         return vehicleInfo;
     }
 }

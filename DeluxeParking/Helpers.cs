@@ -17,19 +17,19 @@ public static class Helpers
             1, 2, 3, 4, 6, 7, 8, 9
         };
 
-        string licensplate = "";
+        string licensPlate = "";
         
         for (int i = 0; i < 3; i++)
         {
-            licensplate += licenseLetters[Random.Shared.Next(0, licenseLetters.Length)];
+            licensPlate += licenseLetters[Random.Shared.Next(0, licenseLetters.Length)];
         }
 
         for (int i = 0; i < 3; i++)
         {
-            licensplate += licenseNumbers[Random.Shared.Next(0, licenseNumbers.Length)];
+            licensPlate += licenseNumbers[Random.Shared.Next(0, licenseNumbers.Length)];
         }
         
-        return licensplate;
+        return licensPlate;
     }
 
     public static Vehicle RandomVehicle()

@@ -4,15 +4,14 @@ public class MotorCycle : Vehicle
 {
     private string Brand { get; set; }
 
-    public MotorCycle(string licensePlateNumber, string vehicleColor, string vehicleName, double vehicleSize, string brand) : base(licensePlateNumber, vehicleColor, vehicleName, vehicleSize)
+    public MotorCycle(string licensePlateNumber, string color, string name, double size, string brand) : base(licensePlateNumber, color, name, size)
     {
         Brand = brand;
-        VehicleName = vehicleName;
     }
     
     public override string PrintVehicle()
     {
-        string vehicleInfo = $"MC\t{LicensePlateNumber}\t{VehicleColor}\t{Brand}";
+        string vehicleInfo = $"\tMC\t{LicensePlateNumber}\t{Color}\t{Brand}";
         return vehicleInfo;
     }
 }

@@ -12,7 +12,7 @@ public class ParkingGarage
 
         for (int i = 0; i < totalSpots; i++)
         {
-            Garage[i] = new ParkingSpot();
+            Garage[i] = new ParkingSpot(); // Skapar en ny tom parkeringsruta på varje position i arrayen
         }
     }
 
@@ -65,19 +65,19 @@ public class ParkingGarage
                     Garage[i].AvailableCapacity = 0; // = 0 eftersom platsen blir full
                     Garage[i + 1].AvailableCapacity = 0;
                     Console.Clear();
-                    Console.WriteLine($"{vehicle.VehicleName} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}-{i + 2}");
+                    Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}-{i + 2}");
                     Thread.Sleep(2000);
                     return;
                 }
             }
             else
             {
-                if (Garage[i].AvailableCapacity >= vehicle.VehicleSize)
+                if (Garage[i].AvailableCapacity >= vehicle.Size)
                 {
                     Garage[i].VehiclesParked.Add(vehicle);
-                    Garage[i].AvailableCapacity -= vehicle.VehicleSize;
+                    Garage[i].AvailableCapacity -= vehicle.Size;
                     Console.Clear();
-                    Console.WriteLine($"{vehicle.VehicleName} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}");
+                    Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}");
                     Thread.Sleep(2000);
                     return;
                 }
@@ -111,7 +111,7 @@ public class ParkingGarage
                         Console.Clear();
                         if (vehicle is Bus)
                         {
-                            for (int j = 0; j < Garage.Length; j++) // Tar bort bussen från alla platser den står på
+                            for (int j = 0; j < Garage.Length; j++) // Tar bort bussen från båda platser den stod på.
                             {
                                 if (Garage[j].VehiclesParked.Contains(vehicle))
                                 {
@@ -123,10 +123,10 @@ public class ParkingGarage
                         else // Hantering för fordon som inte är buss
                         {
                             Garage[i].VehiclesParked.Remove(vehicle);
-                            Garage[i].AvailableCapacity += vehicle.VehicleSize;
+                            Garage[i].AvailableCapacity += vehicle.Size;
                         }
                         
-                        Console.WriteLine($"{vehicle.VehicleName} med registreringsnummer {vehicle.LicensePlateNumber} har checkat ut");
+                        Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} har checkat ut");
                         Thread.Sleep(2000);
                         vehicleFound = true;
                         break; // Avslutar foreach loopen eftersom vi hittade fordonet
@@ -137,7 +137,7 @@ public class ParkingGarage
         if (!vehicleFound && !garageEmpty)
         {
             Console.Clear();
-            Console.WriteLine("Det finns inget fordon med det angivna registreringnumret");
+            Console.WriteLine("Det finns inget fordon med det angivna registreringsnumret");
             Thread.Sleep(2000);
         }
         else if (garageEmpty)
@@ -177,23 +177,23 @@ public class ParkingGarage
                         }
                         if (vehicle is Bus && !busAlreadyPrinted)
                         {
-                            Console.WriteLine($"Plats {index}-{index + 1}: {vehicle.PrintVehicle()}");
+                            Console.WriteLine($"Plats {index}-{index + 1} {vehicle.PrintVehicle()}");
                             index += 2; // +2 för att hoppa över en siffra i utskriften
                         }
                         else if (!(vehicle is Bus))
                         {
-                            Console.WriteLine($"Plats {index}: {vehicle.PrintVehicle()}");
+                            Console.WriteLine($"Plats {index} {vehicle.PrintVehicle()}");
                             index++;
                         }
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"Plats {index}: [Tom]");
+                    Console.WriteLine($"Plats {index} [Tom]");
                     index++;
                 }
             }
-            Console.WriteLine("\nTryck valfri knapp för att gå tillbaka...");
+            Console.WriteLine("\nTryck på valfri knapp för att gå tillbaka...");
             Console.ReadKey();
         }
     }
