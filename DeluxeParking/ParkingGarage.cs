@@ -153,6 +153,7 @@ public class ParkingGarage
             Console.WriteLine("Alla fordon i parkeringshuset just nu:\n");
 
             int index = 1;
+            
             for (int i = 0; i < Garage.Length; i++)
             {
                 ParkingSpot spot = Garage[i];
@@ -161,27 +162,37 @@ public class ParkingGarage
                 {
                     foreach (Vehicle vehicle in spot.VehiclesParked)
                     {
-                        // SE ÖVER
-                        if (vehicle is Bus &&
-                            (i == 0 || !Garage[i - 1].VehiclesParked.Contains(vehicle))) // Visa buss en gång per buss per plats, annars skriver den ut samma buss två gånger
+                        bool busAlreadyPrinted = false;
+
+                        if (i > 0) // i måste vara större än 0, den kan inte jämföra 0 och -1
+                        {
+                            foreach (Vehicle previousVehicle in Garage[i - 1].VehiclesParked)
+                            {
+                                if (previousVehicle is Bus && previousVehicle.LicensePlateNumber == vehicle.LicensePlateNumber)
+                                {
+                                    busAlreadyPrinted = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (vehicle is Bus && !busAlreadyPrinted)
                         {
                             Console.WriteLine($"Plats {index}-{index + 1}: {vehicle.PrintVehicle()}");
-                            i++;
+                            index += 2; // +2 för att hoppa över en siffra i utskriften
                         }
                         else if (!(vehicle is Bus))
                         {
                             Console.WriteLine($"Plats {index}: {vehicle.PrintVehicle()}");
+                            index++;
                         }
                     }
                 }
                 else
                 {
                     Console.WriteLine($"Plats {index}: [Tom]");
+                    index++;
                 }
-
-                index++;
             }
-
             Console.WriteLine("\nTryck valfri knapp för att gå tillbaka...");
             Console.ReadKey();
         }
