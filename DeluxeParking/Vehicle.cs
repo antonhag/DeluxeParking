@@ -6,6 +6,7 @@ public abstract class Vehicle // Hade redan skapat basklassen Vehicle innan inte
     protected string Color { get; set; }
     public string Name { get; set; }
     public double Size { get; set; }
+    public DateTime TimeParked { get; set; } = DateTime.Now;
 
     protected Vehicle(string licensePlateNumber, string color, string name, double size)
     {

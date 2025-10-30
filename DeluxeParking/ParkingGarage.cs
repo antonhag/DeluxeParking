@@ -5,6 +5,7 @@ namespace DeluxeParking;
 public class ParkingGarage
 {
     private ParkingSpot[] Garage { get; set; }
+    private double ParkingFee { get; set; } = 1.5;
 
     public ParkingGarage(int totalSpots)
     {
@@ -25,7 +26,7 @@ public class ParkingGarage
             Console.WriteLine("\n1. För att parkera fordonet");
             Console.WriteLine("2. För att checka ut fordonet");
             Console.WriteLine("3. För att se alla fordon i parkeringshuset");
-
+            Console.WriteLine($"\nParkeringsavgiften för kortidsparkering är: {ParkingFee} kr/min.");
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
 
             switch (keyInfo.Key)
@@ -66,7 +67,7 @@ public class ParkingGarage
                     Garage[i + 1].AvailableCapacity = 0;
                     Console.Clear();
                     Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}-{i + 2}");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(3000);
                     return;
                 }
             }
@@ -78,7 +79,7 @@ public class ParkingGarage
                     Garage[i].AvailableCapacity -= vehicle.Size;
                     Console.Clear();
                     Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}");
-                    Thread.Sleep(2000);
+                    Thread.Sleep(3000);
                     return;
                 }
             }
@@ -91,7 +92,7 @@ public class ParkingGarage
     private void RemoveVehicleFromGarage()
     {
         Console.Write("Skriv in registreringsnumret för fordonet du vill checka ut: ");
-        string input = Console.ReadLine();
+        string input = Console.ReadLine().ToUpper(); // ToUpper för att användaren ska slippa skriva in registreringsnumret med stora bokstäver
 
         bool vehicleFound = false;
         bool garageEmpty = true;
@@ -111,11 +112,11 @@ public class ParkingGarage
                         Console.Clear();
                         if (vehicle is Bus)
                         {
-                            for (int j = 0; j < Garage.Length; j++) // Tar bort bussen från båda platser den stod på.
+                            for (int j = 0; j < Garage.Length; j++) // Loopar genom efter alla bussar med samma regnummer
                             {
                                 if (Garage[j].VehiclesParked.Contains(vehicle))
                                 {
-                                    Garage[j].VehiclesParked.Remove(vehicle);
+                                    Garage[j].VehiclesParked.Remove(vehicle); // Tar bort bussen från båda platser den stod på.
                                     Garage[j].AvailableCapacity += 1; // Varje plats bussen stod på får +1, vilket gör den ledig igen.
                                 }
                             }
@@ -125,9 +126,11 @@ public class ParkingGarage
                             Garage[i].VehiclesParked.Remove(vehicle);
                             Garage[i].AvailableCapacity += vehicle.Size;
                         }
-                        
-                        Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} har checkat ut");
-                        Thread.Sleep(2000);
+
+                        (double minutesParked, double fee) = CalculateParkingFee(vehicle);
+                        // :F2 för att endast skriva ut två decimaler från double variablerna
+                        Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} har checkat ut. Tid parkerad: {minutesParked:F2} minuter. Avgift: {fee:F2} kr"); 
+                        Thread.Sleep(3000);
                         vehicleFound = true;
                         break; // Avslutar foreach loopen eftersom vi hittade fordonet
                     }
@@ -196,4 +199,15 @@ public class ParkingGarage
             Console.WriteLine("\nTryck på valfri knapp för att gå tillbaka...");
             Console.ReadKey();
         }
+    
+        private (double minutesParked, double fee) CalculateParkingFee(Vehicle vehicle)
+        {
+            TimeSpan parkedDuration = DateTime.Now - vehicle.TimeParked;
+            double minutesParked = parkedDuration.TotalMinutes;
+            double fee = minutesParked * ParkingFee;
+            
+            return (Math.Round(minutesParked, 2),Math.Round(fee, 2)); // Math.Round (X, 2) avrundar värdena till två decimaler
+        }
     }
+    
+ 
