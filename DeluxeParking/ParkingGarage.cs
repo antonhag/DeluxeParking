@@ -41,11 +41,12 @@ public class ParkingGarage
                     break;
                 case ConsoleKey.D3:
                     Console.Clear();
-                    Helpers.PrintGarage(Garage);
+                    PrintGarage();
                     break;
                 default:
                     Console.Clear();
                     Console.WriteLine("Ogiltigt val!");
+                    Thread.Sleep(1000);
                     break;
             }
         }
@@ -67,8 +68,7 @@ public class ParkingGarage
                     Garage[i].AvailableCapacity = 0; // = 0 eftersom platsen blir full
                     Garage[i + 1].AvailableCapacity = 0;
                     Console.Clear();
-                    Console.WriteLine(
-                        $"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}-{i + 2}");
+                    Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}-{i + 2}");
                     Thread.Sleep(3000);
                     return;
                 }
@@ -80,8 +80,7 @@ public class ParkingGarage
                     Garage[i].VehiclesParked.Add(vehicle);
                     Garage[i].AvailableCapacity -= vehicle.Size;
                     Console.Clear();
-                    Console.WriteLine(
-                        $"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}");
+                    Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}");
                     Thread.Sleep(3000);
                     return;
                 }
@@ -96,9 +95,7 @@ public class ParkingGarage
     private void RemoveVehicleFromGarage()
     {
         Console.Write("Skriv in registreringsnumret för fordonet du vill checka ut: ");
-        string
-            input = Console.ReadLine()
-                .ToUpper(); // ToUpper för att användaren ska slippa skriva in registreringsnumret med stora bokstäver
+        string input = Console.ReadLine().ToUpper(); // ToUpper för att användaren ska slippa skriva in registreringsnumret med stora bokstäver
 
         bool vehicleFound = false;
         bool garageEmpty = true;
@@ -124,10 +121,8 @@ public class ParkingGarage
                             {
                                 if (Garage[j].VehiclesParked.Contains(vehicle))
                                 {
-                                    Garage[j].VehiclesParked
-                                        .Remove(vehicle); // Tar bort bussen från båda platser den stod på.
-                                    Garage[j].AvailableCapacity +=
-                                        1; // Varje plats bussen stod på får +1, vilket gör den ledig igen.
+                                    Garage[j].VehiclesParked.Remove(vehicle); // Tar bort bussen från båda platser den stod på.
+                                    Garage[j].AvailableCapacity += 1; // Varje plats bussen stod på får +1, vilket gör den ledig igen.
                                 }
                             }
                         }
@@ -139,8 +134,7 @@ public class ParkingGarage
 
                         (double minutesParked, double fee) = Helpers.CalculateParkingFee(vehicle, ParkingFee);
                         // :F2 för att endast skriva ut två decimaler från double variablerna
-                        Console.WriteLine(
-                            $"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} har checkat ut. Tid parkerad: {minutesParked:F2} minuter. Avgift: {fee:F2} kr");
+                        Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} har checkat ut. Tid parkerad: {minutesParked:F2} minuter. Avgift: {fee:F2} kr");
                         Thread.Sleep(3000);
                         vehicleFound = true;
                         break; // Avslutar foreach loopen eftersom vi hittade fordonet
@@ -161,5 +155,67 @@ public class ParkingGarage
             Console.WriteLine("Det finns inga bilar att checka ut, garaget är tomt");
             Thread.Sleep(2000);
         }
+    }
+
+    private void PrintGarage()
+    {
+        Console.WriteLine("Alla fordon i parkeringshuset just nu:\n");
+
+        int index = 1;
+            
+        for (int i = 0; i < Garage.Length; i++)
+        {
+            ParkingSpot spot = Garage[i];
+            bool spotHasBus = false;
+
+            if (spot.VehiclesParked.Count > 0)
+            {
+                foreach (Vehicle vehicle in spot.VehiclesParked)
+                {
+                    bool busAlreadyPrinted = false;
+
+                    if (i > 0) // i måste vara större än 0, den kan inte jämföra 0 och -1
+                    {
+                        foreach (Vehicle previousVehicle in Garage[i - 1].VehiclesParked)
+                        {
+                            if (previousVehicle is Bus && previousVehicle.LicensePlateNumber == vehicle.LicensePlateNumber)
+                            {
+                                busAlreadyPrinted = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (vehicle is Bus)
+                    {
+                        spotHasBus = true;
+
+                        if (!busAlreadyPrinted)
+                        {
+                            {
+                                Console.WriteLine($"Plats {index}-{index + 1} {vehicle.PrintVehicle()}");
+                                index += 2; // +2 för att hoppa över en siffra i utskriften
+                            }
+                        }
+                    }
+                    else if (!(vehicle is Bus))
+                    {
+                        Console.WriteLine($"Plats {index} {vehicle.PrintVehicle()}");
+                    }
+                }
+
+                if (!spotHasBus)
+                {
+                    index++;
+                }
+            }
+            else
+            {
+                Console.WriteLine($"Plats {index} [Tom]");
+                index++;
+            }
+        }
+        Console.WriteLine("\nTryck på valfri knapp för att gå tillbaka...");
+        Console.ReadKey();
     }
 }

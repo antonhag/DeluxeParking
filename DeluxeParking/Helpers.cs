@@ -78,55 +78,6 @@ public static class Helpers
         }
     }
     
-    public static void PrintGarage(ParkingSpot[] garage)
-    {
-        Console.WriteLine("Alla fordon i parkeringshuset just nu:\n");
-
-        int index = 1;
-            
-        for (int i = 0; i < garage.Length; i++)
-        {
-            ParkingSpot spot = garage[i];
-
-            if (spot.VehiclesParked.Count > 0)
-            {
-                foreach (Vehicle vehicle in spot.VehiclesParked)
-                {
-                    bool busAlreadyPrinted = false;
-
-                    if (i > 0) // i måste vara större än 0, den kan inte jämföra 0 och -1
-                    {
-                        foreach (Vehicle previousVehicle in garage[i - 1].VehiclesParked)
-                        {
-                            if (previousVehicle is Bus && previousVehicle.LicensePlateNumber == vehicle.LicensePlateNumber)
-                            {
-                                busAlreadyPrinted = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (vehicle is Bus && !busAlreadyPrinted)
-                    {
-                        Console.WriteLine($"Plats {index}-{index + 1} {vehicle.PrintVehicle()}");
-                        index += 2; // +2 för att hoppa över en siffra i utskriften
-                    }
-                    else if (!(vehicle is Bus))
-                    {
-                        Console.WriteLine($"Plats {index} {vehicle.PrintVehicle()}");
-                        index++;
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine($"Plats {index} [Tom]");
-                index++;
-            }
-        }
-        Console.WriteLine("\nTryck på valfri knapp för att gå tillbaka...");
-        Console.ReadKey();
-    }
-    
     public static (double minutesParked, double fee) CalculateParkingFee(Vehicle vehicle, double parkingFee)
     {
         TimeSpan parkedDuration = DateTime.Now - vehicle.TimeParked;
