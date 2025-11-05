@@ -131,7 +131,9 @@ public class ParkingGarage
                             Garage[i].VehiclesParked.Remove(vehicle);
                             Garage[i].AvailableCapacity += vehicle.Size;
                         }
-
+                        
+                        SortGarage(); // Flytta ner alla fordon så att inga luckor finns efter att ett fordon lämnar P-huset
+                        
                         (double minutesParked, double fee) = Helpers.CalculateParkingFee(vehicle, ParkingFee);
                         // :F2 för att endast skriva ut två decimaler från double variablerna
                         Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} har checkat ut. Tid parkerad: {minutesParked:F2} minuter. Avgift: {fee:F2} kr");
@@ -161,61 +163,120 @@ public class ParkingGarage
     {
         Console.WriteLine("Alla fordon i parkeringshuset just nu:\n");
 
-        int index = 1;
-            
+        int index = 1; // Indexering som skrivs ut för platsnummer
+        
         for (int i = 0; i < Garage.Length; i++)
         {
             ParkingSpot spot = Garage[i];
-            bool spotHasBus = false;
 
-            if (spot.VehiclesParked.Count > 0)
+            if (spot.VehiclesParked.Count == 0)
             {
-                foreach (Vehicle vehicle in spot.VehiclesParked)
+                Console.WriteLine($"Plats {i + 1} [Tom]");
+                index++;
+                continue;
+            }
+            
+            bool busAlreadyPrinted = false;
+
+            if (i > 0) // Kollar om platsen innehåller en buss som redan skrivits ut
+            {
+                foreach (Vehicle prevVehicle in Garage[i - 1].VehiclesParked)
                 {
-                    bool busAlreadyPrinted = false;
-
-                    if (i > 0) // i måste vara större än 0, den kan inte jämföra 0 och -1
+                    if (prevVehicle is Bus && spot.VehiclesParked.Contains(prevVehicle))
                     {
-                        foreach (Vehicle previousVehicle in Garage[i - 1].VehiclesParked)
-                        {
-                            if (previousVehicle is Bus && previousVehicle.LicensePlateNumber == vehicle.LicensePlateNumber)
-                            {
-                                busAlreadyPrinted = true;
-                                break;
-                            }
-                        }
-                    }
-
-                    if (vehicle is Bus)
-                    {
-                        spotHasBus = true;
-
-                        if (!busAlreadyPrinted)
-                        {
-                            {
-                                Console.WriteLine($"Plats {index}-{index + 1} {vehicle.PrintVehicle()}");
-                                index += 2; // +2 för att hoppa över en siffra i utskriften
-                            }
-                        }
-                    }
-                    else if (!(vehicle is Bus))
-                    {
-                        Console.WriteLine($"Plats {index} {vehicle.PrintVehicle()}");
+                        busAlreadyPrinted = true;
+                        break;
                     }
                 }
+            }
 
-                if (!spotHasBus)
-                {
-                    index++;
-                }
+            if (busAlreadyPrinted)
+            {
+                index++;
+                continue;
+            }
+
+            if (spot.VehiclesParked.Count > 0 && spot.VehiclesParked[0] is Bus bus) // Ifall platsen innehåller en buss, skriv ut två platser
+            {
+                Console.WriteLine($"PLats {index}-{index + 1} {bus.PrintVehicle()}");
+                index += 2;
+                i++;
             }
             else
             {
-                Console.WriteLine($"Plats {index} [Tom]");
+                foreach (Vehicle vehicle in spot.VehiclesParked)
+                {
+                    Console.WriteLine($"Plats {index} {vehicle.PrintVehicle()}");
+                }
+
                 index++;
             }
-        }
+        }  
+        
         Console.WriteLine("\nTryck på valfri knapp för att gå tillbaka...");
         Console.ReadKey();
+    }
+
+    private void SortGarage()
+    {
+        List<Vehicle> allVehicles = new();
+
+        for (int i = 0; i < Garage.Length; i++)
+        {
+            foreach (Vehicle vehicle in Garage[i].VehiclesParked)
+            {
+                bool alreadyAdded = false;
+
+                if (vehicle is Bus)
+                {
+                    foreach (Vehicle vehicle2 in allVehicles)
+                    {
+                        if (vehicle2 is Bus && vehicle2.LicensePlateNumber == vehicle.LicensePlateNumber)
+                        {
+                            alreadyAdded = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (!alreadyAdded)
+                {
+                    allVehicles.Add(vehicle);
+                }
+            }
+        }
+
+        foreach (ParkingSpot spot in Garage) // Tar bort alla fordon från varje parkeringsplats och gör dem lediga igen.
+        {
+            spot.VehiclesParked.Clear();
+            spot.AvailableCapacity = 1;
+        }
+
+        foreach (Vehicle vehicle in allVehicles)
+        {
+            for (int i = 0; i < Garage.Length; i++)
+            {
+                if (vehicle is Bus)
+                {
+                    if (i + 1 < Garage.Length && Garage[i].VehiclesParked.Count == 0 && Garage[i + 1].VehiclesParked.Count == 0)
+                    {
+                        Garage[i].VehiclesParked.Add(vehicle);
+                        Garage[i + 1].VehiclesParked.Add(vehicle);
+                        Garage[i].AvailableCapacity = 0; 
+                        Garage[i + 1].AvailableCapacity = 0;
+                        break;
+                    }
+                }
+                else
+                {
+                    if (Garage[i].AvailableCapacity >= vehicle.Size)
+                    {
+                        Garage[i].VehiclesParked.Add(vehicle);
+                        Garage[i].AvailableCapacity -= vehicle.Size;
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
