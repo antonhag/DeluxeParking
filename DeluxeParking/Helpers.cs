@@ -84,6 +84,11 @@ public static class Helpers
         double minutesParked = parkedDuration.TotalMinutes;
         double fee = minutesParked * parkingFee;
 
+        if (vehicle is Bus)
+        {
+            fee *= 2;
+        }
+
         return (Math.Round(minutesParked, 2), Math.Round(fee, 2)); // Math.Round (X, 2) avrundar värdena till två decimaler
     }
     
