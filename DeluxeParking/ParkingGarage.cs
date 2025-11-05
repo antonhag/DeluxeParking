@@ -94,9 +94,24 @@ public class ParkingGarage
 
     private void RemoveVehicleFromGarage()
     {
-        Console.Write("Skriv in registreringsnumret för fordonet du vill checka ut: ");
-        string input = Console.ReadLine().ToUpper(); // ToUpper för att användaren ska slippa skriva in registreringsnumret med stora bokstäver
+        string input = "";
+        
+        while (true)
+        {
+            Console.Write("Skriv in registreringsnumret för fordonet du vill checka ut: ");
+            input = Console.ReadLine().ToUpper(); // ToUpper för att användaren ska slippa skriva in registreringsnumret med stora bokstäver
 
+            if (!string.IsNullOrEmpty(input))
+            {
+                break;
+            }
+
+            Console.Clear();
+            Console.WriteLine("Registreringsnumret kan ej vara tomt, försök igen");
+            Thread.Sleep(1500);
+            Console.Clear();
+        }
+        
         bool vehicleFound = false;
         bool garageEmpty = true;
 

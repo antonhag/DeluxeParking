@@ -32,50 +32,131 @@ public static class Helpers
         return licensPlate;
     }
 
+    private static int vehicleNumber = 0;
+        
     public static Vehicle RandomVehicle()
     {
-        int vehicleRandomizer = Random.Shared.Next(0, 3);
+        Vehicle vehicle = null;
+        //int vehicleRandomizer = Random.Shared.Next(0, 3);
+        
 
-        switch (vehicleRandomizer)
+        switch (vehicleNumber)
         {
             case 0:
-                bool carIsElectric = true;
-                
-                Console.Write("Skriv in färgen på bilen: ");
-                string carColor = Console.ReadLine();
-                Console.Clear();
-                Console.WriteLine("Är bilen en elbil?\n1. Elbil\n2. Ej elbil");
-                ConsoleKeyInfo keyInput = Console.ReadKey(true);
-                switch (keyInput.Key)
+            case 4:    
+                string carColor = "";
+                while (true)
                 {
-                    case ConsoleKey.D1:
-                        carIsElectric = true;
+                    Console.Clear();
+                    Console.Write("Skriv in färgen på bilen: ");
+                    carColor = Console.ReadLine();
+
+                    if (!string.IsNullOrEmpty(carColor) && carColor.All(char.IsLetter))
+                    {
                         break;
-                    case ConsoleKey.D2:
-                        carIsElectric = false;
-                        break;
-                    default:
-                        Console.WriteLine("Ogiltigt val!");
-                        break;
+                    }
+
+                    Console.Clear();
+                    Console.WriteLine("Färgen får endast innehålla bokstäver, försök igen");
+                    Thread.Sleep(1500);
                 }
-                return new Car(GenerateLicensPlateNumber(), carColor, "Bil", 1, carIsElectric);
+                
+                bool carIsElectric = false;
+                bool validInput = false;
+
+                while (!validInput)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Är bilen en elbil?\n1. Elbil\n2. Ej elbil");
+                    ConsoleKeyInfo keyInput = Console.ReadKey(true);
+                    switch (keyInput.Key)
+                    {
+                        case ConsoleKey.D1:
+                            carIsElectric = true;
+                            validInput = true;
+                            break;
+                        case ConsoleKey.D2:
+                            carIsElectric = false;
+                            validInput = true;
+                            break;
+                        default:
+                            Console.Clear();
+                            Console.WriteLine("Ogiltigt val! Försök igen");
+                            Thread.Sleep(1500);
+                            break;
+                    }
+                }
+                vehicle = new Car(GenerateLicensPlateNumber(), carColor, "Bil", 1, carIsElectric);
+                break;
             case 1:
-                Console.Write("Skriv in färgen på motorcykeln: ");
-                string mcColor = Console.ReadLine();
+            case 2:    
+                string mcColor = "";
+                while (true)
+                {
+                    Console.Clear();
+                    Console.Write("Skriv in färgen på motorcykeln: ");
+                    mcColor = Console.ReadLine();
+
+                    if (!string.IsNullOrEmpty(mcColor) && mcColor.All(char.IsLetter))
+                    {
+                        break;
+                    }
+
+                    Console.Clear();
+                    Console.WriteLine("Färgen får endast innehålla bokstäver, försök igen");
+                    Thread.Sleep(1500);
+                }
+                
                 Console.Clear();
                 Console.Write("Skriv in märket på motorcykeln: ");
                 string mcBrand = Console.ReadLine();
-                return new MotorCycle(GenerateLicensPlateNumber(), mcColor, "Motorcykel",0.5, mcBrand);
-            case 2:
-                Console.Write("Skriv in färgen på bussen: ");
-                string busColor = Console.ReadLine();
+                
+                vehicle = new MotorCycle(GenerateLicensPlateNumber(), mcColor, "Motorcykel",0.5, mcBrand);
+                break;
+            case 3:
+            case 5:
+                string busColor = "";
+                while (true)
+                {
+                    Console.Write("Skriv in färgen på bussen: ");
+                    busColor = Console.ReadLine();
+
+                    if (!string.IsNullOrEmpty(busColor) && busColor.All(char.IsLetter))
+                    {
+                        break;
+                    }
+
+                    Console.Clear();
+                    Console.WriteLine("Färgen får endast innehålla bokstäver, försök igen");
+                    Thread.Sleep(1500);
+                    Console.Clear();
+                }
                 Console.Clear();
-                Console.Write("Skriv in antalet platser bussen har: ");
-                int numberOfSeats = int.Parse(Console.ReadLine());
-                return new Bus(GenerateLicensPlateNumber(), busColor, "Buss", 2, numberOfSeats);
-            default: // Kan egentligen aldrig nås, eftersom Random.Shared.Next endast kan bli 0,1 eller 2. Koden fungerar inte utan denna kodrad, därav finns den.
-                return null;
+
+                int numberOfSeats = 0;
+                while (true)
+                {
+                    Console.Clear();
+                    Console.Write("Skriv in antalet platser bussen har: ");
+                    string input = Console.ReadLine();
+
+                    try
+                    {
+                        numberOfSeats = int.Parse(input);
+                        break;
+                    }
+                    catch
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Antalet platser får endast innehålla siffror, försök igen");
+                        Thread.Sleep(1500);
+                    }
+                }
+                vehicle = new Bus(GenerateLicensPlateNumber(), busColor, "Buss", 2, numberOfSeats);
+                break;
         }
+        vehicleNumber++;
+        return vehicle;
     }
     
     public static (double minutesParked, double fee) CalculateParkingFee(Vehicle vehicle, double parkingFee)
