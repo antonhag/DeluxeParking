@@ -4,7 +4,9 @@ class Program
 {
     static void Main(string[] args)
     {
-        ParkingGarage parkingGarage = new(15);
+        int totalParkingSpots = 15;
+        
+        ParkingGarage parkingGarage = new(totalParkingSpots);
         parkingGarage.RunGarage();
     }
 }
