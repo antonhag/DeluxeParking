@@ -45,15 +45,16 @@ public static class Helpers
             case 0:
             case 4:
             case 6:
-                string carColor = ValidateInput("Skriv in färgen på bilen: ", input =>
+                string carColor = ValidateInput("Skriv in färgen på bilen: ", input => //Lambda-uttryck som skickas in som metod till ValidateInput
                     {
-                        bool success = !string.IsNullOrWhiteSpace(input) && input.All(char.IsLetter); // Är sann ifall strängens värde inte är null eller endast innehåller mellanslag, och att strängen endast innehåller bokstäver
+                        // Är sann ifall strängens värde inte är null eller endast innehåller mellanslag, och att strängen endast innehåller bokstäver
+                        bool success = !string.IsNullOrWhiteSpace(input) && input.All(char.IsLetter); 
                         return (success, input);
                     },
-                    "Färgen får endast innehålla bokstäver, försök igen" // errorMessage som skickas med in i funktion ValidateInput
+                    "Färgen får endast innehålla bokstäver, försök igen" // errorMessage som skickas med in i metoden ValidateInput
                 );
                 
-                bool carIsElectric = false;
+                bool isCarElectric = false;
                 bool validInput = false;
 
                 while (!validInput)
@@ -64,11 +65,11 @@ public static class Helpers
                     switch (keyInput.Key)
                     {
                         case ConsoleKey.D1:
-                            carIsElectric = true;
+                            isCarElectric = true;
                             validInput = true;
                             break;
                         case ConsoleKey.D2:
-                            carIsElectric = false;
+                            isCarElectric = false;
                             validInput = true;
                             break;
                         default:
@@ -78,7 +79,7 @@ public static class Helpers
                             break;
                     }
                 }
-                vehicle = new Car(GenerateLicensPlateNumber(), carColor, "Bil", 1, carIsElectric);
+                vehicle = new Car(GenerateLicensPlateNumber(), carColor, "Bil", 1, isCarElectric);
                 break;
             case 1:
             case 2:
@@ -141,7 +142,7 @@ public static class Helpers
     // Generisk metod för att läsa och validera användarens inmatning, funkar både för strängar och intar
     // T = datatypen som returneras, i detta fall antingen en int för antal platser eller en sträng för färg 
     // prompt = texten som skrivs ut för användaren, tex "Skriv in färgen på bilen"
-    // parser = funktion som tolkar input och returnerar en tuple (bool: inmatning giltig?, T: värdet)
+    // parser = metod som tolkar input och returnerar en tuple (bool: inmatning giltig?, T: värdet)
     private static T ValidateInput<T>(string prompt, Func<string, (bool, T)> parser, string errorMessage) 
     {
         while (true)

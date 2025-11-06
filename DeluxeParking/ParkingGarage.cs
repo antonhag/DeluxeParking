@@ -60,16 +60,14 @@ public class ParkingGarage
         {
             if (vehicle is Bus)
             {
-                if (i + 1 < Garage.Length && Garage[i].VehiclesParked.Count == 0 &&
-                    Garage[i + 1].VehiclesParked.Count == 0)
+                if (i + 1 < Garage.Length && Garage[i].VehiclesParked.Count == 0 && Garage[i + 1].VehiclesParked.Count == 0) 
                 {
                     Garage[i].VehiclesParked.Add(vehicle);
                     Garage[i + 1].VehiclesParked.Add(vehicle);
                     Garage[i].AvailableCapacity = 0; // = 0 eftersom platsen blir full
                     Garage[i + 1].AvailableCapacity = 0;
                     Console.Clear();
-                    Console.WriteLine(
-                        $"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}-{i + 2}");
+                    Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}-{i + 2}");
                     Thread.Sleep(3000);
                     return;
                 }
@@ -81,8 +79,7 @@ public class ParkingGarage
                     Garage[i].VehiclesParked.Add(vehicle);
                     Garage[i].AvailableCapacity -= vehicle.Size;
                     Console.Clear();
-                    Console.WriteLine(
-                        $"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}");
+                    Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} parkerades på plats {i + 1}");
                     Thread.Sleep(3000);
                     return;
                 }
@@ -101,10 +98,9 @@ public class ParkingGarage
         while (true)
         {
             Console.Write("Skriv in registreringsnumret för fordonet du vill checka ut: ");
-            input = Console.ReadLine()
-                .ToUpper(); // ToUpper för att användaren ska slippa skriva in registreringsnumret med stora bokstäver
+            input = Console.ReadLine().ToUpper(); // ToUpper för att användaren ska slippa skriva in registreringsnumret med stora bokstäver
 
-            if (!string.IsNullOrEmpty(input))
+            if (!string.IsNullOrWhiteSpace(input))
             {
                 break;
             }
@@ -115,16 +111,16 @@ public class ParkingGarage
             Console.Clear();
         }
 
-        bool vehicleFound = false;
-        bool garageEmpty = true;
+        bool isVehicleFound = false;
+        bool isGarageEmpty = true;
 
         for (int i = 0; i < Garage.Length; i++)
         {
-            ParkingSpot spot = Garage[i];
+            ParkingSpot spot = Garage[i]; // Sparar nuvarande parkeringsplats i loopen i variabeln spot.
 
             if (spot.VehiclesParked.Count > 0)
             {
-                garageEmpty = false;
+                isGarageEmpty = false;
 
                 foreach (Vehicle vehicle in spot.VehiclesParked)
                 {
@@ -133,16 +129,12 @@ public class ParkingGarage
                         Console.Clear();
                         if (vehicle is Bus)
                         {
-                            for (int j = 0;
-                                 j < Garage.Length;
-                                 j++) // Loopar genom efter alla bussar med samma regnummer
+                            for (int j = 0; j < Garage.Length; j++) // Loopar genom efter alla bussar med samma regnummer
                             {
                                 if (Garage[j].VehiclesParked.Contains(vehicle))
                                 {
-                                    Garage[j].VehiclesParked
-                                        .Remove(vehicle); // Tar bort bussen från båda platser den stod på.
-                                    Garage[j].AvailableCapacity +=
-                                        1; // Varje plats bussen stod på får +1, vilket gör den ledig igen.
+                                    Garage[j].VehiclesParked.Remove(vehicle); // Tar bort bussen från båda platser den stod på.
+                                    Garage[j].AvailableCapacity += 1; // Varje plats bussen stod på får +1, vilket gör den ledig igen.
                                 }
                             }
                         }
@@ -156,23 +148,22 @@ public class ParkingGarage
 
                         (double minutesParked, double fee) = Helpers.CalculateParkingFee(vehicle, ParkingFee);
                         // :F2 för att endast skriva ut två decimaler från double variablerna
-                        Console.WriteLine(
-                            $"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} har checkat ut. Tid parkerad: {minutesParked:F2} minuter. Avgift: {fee:F2} kr");
+                        Console.WriteLine($"{vehicle.Name} med registreringsnummer {vehicle.LicensePlateNumber} har checkat ut. Tid parkerad: {minutesParked:F2} minuter. Avgift: {fee:F2} kr");
                         Thread.Sleep(3000);
-                        vehicleFound = true;
+                        isVehicleFound = true;
                         break; // Avslutar foreach loopen eftersom vi hittade fordonet
                     }
                 }
             }
         }
 
-        if (!vehicleFound && !garageEmpty)
+        if (!isVehicleFound && !isGarageEmpty)
         {
             Console.Clear();
             Console.WriteLine("Det finns inget fordon med det angivna registreringsnumret");
             Thread.Sleep(2000);
         }
-        else if (garageEmpty)
+        else if (isGarageEmpty)
         {
             Console.Clear();
             Console.WriteLine("Det finns inga bilar att checka ut, garaget är tomt");
@@ -197,7 +188,7 @@ public class ParkingGarage
                 continue;
             }
 
-            bool busAlreadyPrinted = false;
+            bool isBusAlreadyPrinted = false;
 
             if (i > 0) // Kollar om platsen innehåller en buss som redan skrivits ut
             {
@@ -205,20 +196,19 @@ public class ParkingGarage
                 {
                     if (prevVehicle is Bus && spot.VehiclesParked.Contains(prevVehicle))
                     {
-                        busAlreadyPrinted = true;
+                        isBusAlreadyPrinted = true;
                         break;
                     }
                 }
             }
 
-            if (busAlreadyPrinted)
+            if (isBusAlreadyPrinted)
             {
                 index++;
                 continue;
             }
 
-            if (spot.VehiclesParked.Count > 0 &&
-                spot.VehiclesParked[0] is Bus bus) // Ifall platsen innehåller en buss, skriv ut två platser
+            if (spot.VehiclesParked.Count > 0 && spot.VehiclesParked[0] is Bus bus) // Ifall platsen innehåller en buss, skriv ut två platser
             {
                 Console.WriteLine($"PLats {index}-{index + 1} {bus.PrintVehicle()}");
                 index += 2;
@@ -247,21 +237,21 @@ public class ParkingGarage
         {
             foreach (Vehicle vehicle in Garage[i].VehiclesParked)
             {
-                bool alreadyAdded = false;
+                bool isAlreadyAdded = false; // Används för att undvika lägga till samma buss två gånger
 
                 if (vehicle is Bus)
                 {
-                    foreach (Vehicle vehicle2 in allVehicles)
+                    foreach (Vehicle vehicle2 in allVehicles) // Kontrollerar om samma buss redan finns tillagd i listan
                     {
                         if (vehicle2 is Bus && vehicle2.LicensePlateNumber == vehicle.LicensePlateNumber)
                         {
-                            alreadyAdded = true;
+                            isAlreadyAdded = true;
                             break;
                         }
                     }
                 }
 
-                if (!alreadyAdded)
+                if (!isAlreadyAdded)
                 {
                     allVehicles.Add(vehicle);
                 }
