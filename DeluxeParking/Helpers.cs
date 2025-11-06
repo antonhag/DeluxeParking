@@ -43,23 +43,15 @@ public static class Helpers
         switch (vehicleNumber)
         {
             case 0:
-            case 4:    
-                string carColor = "";
-                while (true)
-                {
-                    Console.Clear();
-                    Console.Write("Skriv in färgen på bilen: ");
-                    carColor = Console.ReadLine();
-
-                    if (!string.IsNullOrEmpty(carColor) && carColor.All(char.IsLetter))
+            case 4:
+            case 6:
+                string carColor = ValidateInput("Skriv in färgen på bilen: ", input =>
                     {
-                        break;
-                    }
-
-                    Console.Clear();
-                    Console.WriteLine("Färgen får endast innehålla bokstäver, försök igen");
-                    Thread.Sleep(1500);
-                }
+                        bool success = !string.IsNullOrWhiteSpace(input) && input.All(char.IsLetter); // Är sann ifall strängens värde inte är null eller endast innehåller mellanslag, och att strängen endast innehåller bokstäver
+                        return (success, input);
+                    },
+                    "Färgen får endast innehålla bokstäver, försök igen" // errorMessage som skickas med in i funktion ValidateInput
+                );
                 
                 bool carIsElectric = false;
                 bool validInput = false;
@@ -89,23 +81,15 @@ public static class Helpers
                 vehicle = new Car(GenerateLicensPlateNumber(), carColor, "Bil", 1, carIsElectric);
                 break;
             case 1:
-            case 2:    
-                string mcColor = "";
-                while (true)
-                {
-                    Console.Clear();
-                    Console.Write("Skriv in färgen på motorcykeln: ");
-                    mcColor = Console.ReadLine();
-
-                    if (!string.IsNullOrEmpty(mcColor) && mcColor.All(char.IsLetter))
+            case 2:
+            case 8:
+                string mcColor = ValidateInput("Skriv in färgen på motorcykeln: ", input =>
                     {
-                        break;
-                    }
-
-                    Console.Clear();
-                    Console.WriteLine("Färgen får endast innehålla bokstäver, försök igen");
-                    Thread.Sleep(1500);
-                }
+                        bool success = !string.IsNullOrWhiteSpace(input) && input.All(char.IsLetter);
+                        return (success, input);
+                    },
+                    "Färgen får endast innehålla bokstäver, försök igen"
+                );
                 
                 Console.Clear();
                 Console.Write("Skriv in märket på motorcykeln: ");
@@ -115,43 +99,24 @@ public static class Helpers
                 break;
             case 3:
             case 5:
-                string busColor = "";
-                while (true)
-                {
-                    Console.Write("Skriv in färgen på bussen: ");
-                    busColor = Console.ReadLine();
-
-                    if (!string.IsNullOrEmpty(busColor) && busColor.All(char.IsLetter))
+            case 7:
+                string busColor = ValidateInput("Skriv in färgen på bussen: ", input =>
                     {
-                        break;
-                    }
+                        bool success = !string.IsNullOrWhiteSpace(input) && input.All(char.IsLetter);
+                        return (success, input);
+                    },
+                    "Färgen får endast innehålla bokstäver, försök igen"
+                );
 
-                    Console.Clear();
-                    Console.WriteLine("Färgen får endast innehålla bokstäver, försök igen");
-                    Thread.Sleep(1500);
-                    Console.Clear();
-                }
-                Console.Clear();
-
-                int numberOfSeats = 0;
-                while (true)
-                {
-                    Console.Clear();
-                    Console.Write("Skriv in antalet platser bussen har: ");
-                    string input = Console.ReadLine();
-
-                    try
+                int numberOfSeats = ValidateInput("Skriv in antalet platser bussen har: ", input =>
                     {
-                        numberOfSeats = int.Parse(input);
-                        break;
-                    }
-                    catch
-                    {
-                        Console.Clear();
-                        Console.WriteLine("Antalet platser får endast innehålla siffror, försök igen");
-                        Thread.Sleep(1500);
-                    }
-                }
+                        bool success = int.TryParse(input, out int value);
+                        return (success, value);
+
+                    },
+                    "Antalet platser får endast innehålla siffror, försök igen"
+                );
+              
                 vehicle = new Bus(GenerateLicensPlateNumber(), busColor, "Buss", 2, numberOfSeats);
                 break;
         }
@@ -165,12 +130,36 @@ public static class Helpers
         double minutesParked = parkedDuration.TotalMinutes;
         double fee = minutesParked * parkingFee;
 
-        if (vehicle is Bus)
+        if (vehicle is Bus) // Ifall fordonet är en buss blir parkeringsavgiften dubbelt så dyr eftersom bussen tar upp två platser
         {
             fee *= 2;
         }
 
         return (Math.Round(minutesParked, 2), Math.Round(fee, 2)); // Math.Round (X, 2) avrundar värdena till två decimaler
+    }
+
+    // Generisk metod för att läsa och validera användarens inmatning, funkar både för strängar och intar
+    // T = datatypen som returneras, i detta fall antingen en int för antal platser eller en sträng för färg 
+    // prompt = texten som skrivs ut för användaren, tex "Skriv in färgen på bilen"
+    // parser = funktion som tolkar input och returnerar en tuple (bool: inmatning giltig?, T: värdet)
+    private static T ValidateInput<T>(string prompt, Func<string, (bool, T)> parser, string errorMessage) 
+    {
+        while (true)
+        {
+            Console.Clear();            
+            Console.Write(prompt);
+            string input = Console.ReadLine();
+            
+            (bool success, T value) = parser(input);
+            if (success)
+            {
+                return value;
+            }
+
+            Console.Clear();
+            Console.WriteLine(errorMessage);
+            Thread.Sleep(1500);
+        }
     }
     
 }
