@@ -229,7 +229,8 @@ public class ParkingGarage
         Console.ReadKey();
     }
 
-    // En övertänkt metod (som jag lade till i efter hand) för att sortera Garaget så att det ej finns tomma mellanrum, vilket ej är realistiskt att parkera om alla bilar efter ett fordon lämnat. 
+    // En övertänkt metod (som jag lade till i efter hand) för att sortera Garaget så att det ej finns tomma mellanrum, vilket ej är realistiskt att parkera om alla bilar efter ett fordon lämnat.
+    
     // private void SortGarage()
     // {
     //     List<Vehicle> allVehicles = new();

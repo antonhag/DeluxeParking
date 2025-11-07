@@ -35,6 +35,7 @@ public static class Helpers
     public static Vehicle RandomVehicle()
     {
         Vehicle vehicle = null;
+        
         int vehicleRandomizer = Random.Shared.Next(0, 3);
         
         switch (vehicleRandomizer)
