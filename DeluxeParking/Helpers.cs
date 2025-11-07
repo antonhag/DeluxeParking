@@ -31,20 +31,15 @@ public static class Helpers
         
         return licensPlate;
     }
-
-    private static int vehicleNumber = 0;
         
     public static Vehicle RandomVehicle()
     {
         Vehicle vehicle = null;
-        //int vehicleRandomizer = Random.Shared.Next(0, 3);
+        int vehicleRandomizer = Random.Shared.Next(0, 3);
         
-
-        switch (vehicleNumber)
+        switch (vehicleRandomizer)
         {
             case 0:
-            case 4:
-            case 6:
                 string carColor = ValidateInput("Skriv in färgen på bilen: ", input => //Lambda-uttryck som skickas in som metod till ValidateInput
                     {
                         // Är sann ifall strängens värde inte är null eller endast innehåller mellanslag, och att strängen endast innehåller bokstäver
@@ -82,8 +77,6 @@ public static class Helpers
                 vehicle = new Car(GenerateLicensPlateNumber(), carColor, "Bil", 1, isCarElectric);
                 break;
             case 1:
-            case 2:
-            case 8:
                 string mcColor = ValidateInput("Skriv in färgen på motorcykeln: ", input =>
                     {
                         bool success = !string.IsNullOrWhiteSpace(input) && input.All(char.IsLetter);
@@ -98,9 +91,7 @@ public static class Helpers
                 
                 vehicle = new MotorCycle(GenerateLicensPlateNumber(), mcColor, "Motorcykel",0.5, mcBrand);
                 break;
-            case 3:
-            case 5:
-            case 7:
+            case 2:
                 string busColor = ValidateInput("Skriv in färgen på bussen: ", input =>
                     {
                         bool success = !string.IsNullOrWhiteSpace(input) && input.All(char.IsLetter);
@@ -121,7 +112,6 @@ public static class Helpers
                 vehicle = new Bus(GenerateLicensPlateNumber(), busColor, "Buss", 2, numberOfSeats);
                 break;
         }
-        vehicleNumber++;
         return vehicle;
     }
     

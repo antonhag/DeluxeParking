@@ -144,7 +144,7 @@ public class ParkingGarage
                             Garage[i].AvailableCapacity += vehicle.Size;
                         }
 
-                        SortGarage(); // Flytta ner alla fordon så att inga luckor finns efter att ett fordon lämnar P-huset
+                        //SortGarage(); // Flytta ner alla fordon så att inga luckor finns efter att ett fordon lämnar P-huset
 
                         (double minutesParked, double fee) = Helpers.CalculateParkingFee(vehicle, ParkingFee);
                         // :F2 för att endast skriva ut två decimaler från double variablerna
@@ -229,69 +229,70 @@ public class ParkingGarage
         Console.ReadKey();
     }
 
-    private void SortGarage()
-    {
-        List<Vehicle> allVehicles = new();
-
-        for (int i = 0; i < Garage.Length; i++)
-        {
-            foreach (Vehicle vehicle in Garage[i].VehiclesParked)
-            {
-                bool isAlreadyAdded = false; // Används för att undvika lägga till samma buss två gånger
-
-                if (vehicle is Bus)
-                {
-                    foreach (Vehicle vehicle2 in allVehicles) // Kontrollerar om samma buss redan finns tillagd i listan
-                    {
-                        if (vehicle2 is Bus && vehicle2.LicensePlateNumber == vehicle.LicensePlateNumber)
-                        {
-                            isAlreadyAdded = true;
-                            break;
-                        }
-                    }
-                }
-
-                if (!isAlreadyAdded)
-                {
-                    allVehicles.Add(vehicle);
-                }
-            }
-        }
-
-        foreach (ParkingSpot spot in Garage) // Tar bort alla fordon från varje parkeringsplats och gör dem lediga igen.
-        {
-            spot.VehiclesParked.Clear();
-            spot.AvailableCapacity = 1;
-        }
-
-        foreach (Vehicle vehicle in allVehicles)
-        {
-            if (vehicle is Bus)
-            {
-                for (int i = 0; i < Garage.Length; i++)
-                {
-                    if (i + 1 < Garage.Length && Garage[i].VehiclesParked.Count == 0 && Garage[i + 1].VehiclesParked.Count == 0)
-                    {
-                        Garage[i].VehiclesParked.Add(vehicle);
-                        Garage[i + 1].VehiclesParked.Add(vehicle);
-                        Garage[i].AvailableCapacity = 0;
-                        Garage[i + 1].AvailableCapacity = 0;
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < (Garage.Length); i++)
-                {
-                    if (Garage[i].AvailableCapacity >= vehicle.Size)
-                    {
-                        Garage[i].VehiclesParked.Add(vehicle);
-                        Garage[i].AvailableCapacity -= vehicle.Size;
-                        break;
-                    }
-                }
-            }
-        }
-    }
+    // En övertänkt metod (som jag lade till i efter hand) för att sortera Garaget så att det ej finns tomma mellanrum, vilket ej är realistiskt att parkera om alla bilar efter ett fordon lämnat. 
+    // private void SortGarage()
+    // {
+    //     List<Vehicle> allVehicles = new();
+    //
+    //     for (int i = 0; i < Garage.Length; i++)
+    //     {
+    //         foreach (Vehicle vehicle in Garage[i].VehiclesParked)
+    //         {
+    //             bool isAlreadyAdded = false; // Används för att undvika lägga till samma buss två gånger
+    //
+    //             if (vehicle is Bus)
+    //             {
+    //                 foreach (Vehicle vehicle2 in allVehicles) // Kontrollerar om samma buss redan finns tillagd i listan
+    //                 {
+    //                     if (vehicle2 is Bus && vehicle2.LicensePlateNumber == vehicle.LicensePlateNumber)
+    //                     {
+    //                         isAlreadyAdded = true;
+    //                         break;
+    //                     }
+    //                 }
+    //             }
+    //
+    //             if (!isAlreadyAdded)
+    //             {
+    //                 allVehicles.Add(vehicle);
+    //             }
+    //         }
+    //     }
+    //
+    //     foreach (ParkingSpot spot in Garage) // Tar bort alla fordon från varje parkeringsplats och gör dem lediga igen.
+    //     {
+    //         spot.VehiclesParked.Clear();
+    //         spot.AvailableCapacity = 1;
+    //     }
+    //
+    //     foreach (Vehicle vehicle in allVehicles) // Parkerar om fordonen
+    //     {
+    //         if (vehicle is Bus)
+    //         {
+    //             for (int i = 0; i < Garage.Length; i++)
+    //             {
+    //                 if (i + 1 < Garage.Length && Garage[i].VehiclesParked.Count == 0 && Garage[i + 1].VehiclesParked.Count == 0)
+    //                 {
+    //                     Garage[i].VehiclesParked.Add(vehicle);
+    //                     Garage[i + 1].VehiclesParked.Add(vehicle);
+    //                     Garage[i].AvailableCapacity = 0;
+    //                     Garage[i + 1].AvailableCapacity = 0;
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //         else
+    //         {
+    //             for (int i = 0; i < (Garage.Length); i++)
+    //             {
+    //                 if (Garage[i].AvailableCapacity >= vehicle.Size)
+    //                 {
+    //                     Garage[i].VehiclesParked.Add(vehicle);
+    //                     Garage[i].AvailableCapacity -= vehicle.Size;
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
